@@ -49,7 +49,7 @@ export default function LeadsBySourceList() {
       <div className="w-[95%] md:w-[90%] max-w-[1100px] mx-auto bg-white mt-4 border border-gray-300 rounded-sm shadow-md">
         {/* Header */}
         <div className="border-b px-4 py-3">
-          <h2 className="text-sm font-semibold text-gray-800 text-left">
+          <h2 className="text-lsm font-semibold text-gray-800 text-left">
             Leads By <span className="font-bold">Source List</span>
           </h2>
         </div>
