@@ -5,12 +5,15 @@ import './App.css';
 //import DealsBySourceList from './Dealsbysourcelist';
 //import CommentsBySalesPerson from './Commentbysalesperson';
 //import LeadsByProductList from './Leadbyproductlist';
-import LeadsByStatusList from './Leadbystatuslist';
+//import LeadsByStatusList from './Leadbystatuslist';
+//import LeadsByProductChart from './Leadproductgraph';
+//import LeadsByStatus from './Leadstatusgraph';
+import SalespersonLeadsChart from './Salespersonleads';
 
 function App() {
   return (
     <div className="App">
-      <LeadsByStatusList />
+      <SalespersonLeadsChart />
     </div>
   );
 }
