@@ -4,12 +4,13 @@ import './App.css';
 //import LeadsIntoDealsList from './Leadsintodeals';
 //import DealsBySourceList from './Dealsbysourcelist';
 //import CommentsBySalesPerson from './Commentbysalesperson';
-import LeadsByProductList from './Leadbyproductlist';
+//import LeadsByProductList from './Leadbyproductlist';
+import LeadsByStatusList from './Leadbystatuslist';
 
 function App() {
   return (
     <div className="App">
-      <LeadsByProductList />
+      <LeadsByStatusList />
     </div>
   );
 }
