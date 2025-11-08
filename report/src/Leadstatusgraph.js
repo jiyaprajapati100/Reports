@@ -38,7 +38,7 @@ const LeadsStatusChart = () => {
         style={{
           width: 20,
           height: 10,
-          backgroundColor: "#2c75c4ff",
+          backgroundColor: "#3d60d2", // Using color from bar
           marginRight: 8,
           borderRadius: 2,
         }}
@@ -48,8 +48,11 @@ const LeadsStatusChart = () => {
   );
 
   return (
-    <div className="flex items-center justify-center bg-gray-100 min-h-screen p-4">
-      <div className="bg-white border border-gray-300 rounded-md shadow-sm w-full max-w-6xl">
+    // FINAL SIMPLIFICATION: Removed all external layout/background styles (flex, min-h-screen, p-4)
+    <div className="w-full"> 
+      {/* This is the main white card container */}
+      <div className="bg-white border border-gray-300 rounded-md shadow-sm w-full max-w-6xl mx-auto">
+        
         {/* Header */}
         <div className="flex items-center justify-between border-b border-gray-200 bg-gray-50 px-6 py-3">
           <h2 className="text-gray-700 text-sm font-semibold">
@@ -57,7 +60,8 @@ const LeadsStatusChart = () => {
           </h2>
           <button
             onClick={handlePrint}
-            className="bg-purple-800 text-white text-sm px-4 py-1.5 rounded hover:bg-purple-900"
+            // Add a class for print CSS to hide the button
+            className="bg-purple-800 text-white text-sm px-4 py-1.5 rounded hover:bg-purple-900 print-btn" 
           >
             Print
           </button>
@@ -90,7 +94,7 @@ const LeadsStatusChart = () => {
                 tickLine={false}
               />
 
-              <Tooltip cursor={{ fill: "rgba(0,0,0,0.05)" }} />
+              <Tooltip cursor={{ fill: "rgba(255, 247, 247, 0.05)" }} />
 
               <Legend verticalAlign="top" align="left" content={<CustomLegend />} />
 

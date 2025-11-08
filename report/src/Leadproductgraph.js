@@ -8,6 +8,7 @@ import {
   CartesianGrid,
   ResponsiveContainer,
   ReferenceLine,
+  Tooltip,
 } from "recharts";
 
 const LeadsByProductChart = () => {
@@ -19,18 +20,16 @@ const LeadsByProductChart = () => {
     { name: "hi", leads: 0 },
   ];
 
-  const handlePrint = () => {
-    window.print();
-  };
+  const handlePrint = () => window.print();
 
-  // ✅ Custom Legend Component
+  // ✅ Custom Legend
   const CustomLegend = () => (
     <div
       style={{
         display: "flex",
         alignItems: "center",
         paddingBottom: 20,
-        marginLeft: 60, // ✅ Added left margin to whole legend (blue box + text)
+        marginLeft: 60,
       }}
     >
       <div
@@ -48,98 +47,81 @@ const LeadsByProductChart = () => {
     </div>
   );
 
-  return (
-    <div className="flex items-center justify-center p-4 bg-gray-100 min-h-screen">
-      <div className="bg-white border border-gray-300 rounded-md shadow-md w-full max-w-6xl mx-auto">
-        {/* Header */}
-        <div className="flex items-center justify-between px-6 py-3 border-b border-gray-200 bg-gray-50">
-          <h2 className="text-gray-700 text-sm font-semibold">
-            Leads by <span className="font-bold">Product</span>
-          </h2>
-          <button
-            onClick={handlePrint}
-            className="bg-purple-800 text-white text-sm px-4 py-1.5 rounded hover:bg-purple-900"
-          >
-            Print
-          </button>
+  // ✅ Custom Tooltip (white background)
+  const CustomTooltip = ({ active, payload, label }) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="bg-white border border-gray-300 rounded-md shadow-lg px-3 py-2">
+          <p className="text-sm font-semibold text-gray-800">{label}</p>
+          <p className="text-sm text-gray-700">
+            Leads: <span className="font-bold text-blue-700">{payload[0].value}</span>
+          </p>
         </div>
+      );
+    }
+    return null;
+  };
 
-        {/* Chart Area */}
-        <div
-          className="p-6 bg-white rounded-b-md"
-          style={{
-            userSelect: "none", // Prevent selection outline
-          }}
-        >
-          <ResponsiveContainer width="100%" height={400}>
-            <BarChart
-              data={data}
-              margin={{ top: 20, right: 30, left: 20, bottom: 10 }}
-              barCategoryGap="20%"
-              style={{
-                border: "none",
-                outline: "none",
-                boxShadow: "none",
-                background: "transparent",
-              }}
+  return (
+    <div className="print-section">
+      <div className="chart-container flex items-center justify-center p-4 bg-gray-100 min-h-screen">
+        <div className="bg-white border border-gray-300 rounded-md shadow-md w-full max-w-6xl mx-auto">
+
+          {/* Header */}
+          <div className="flex items-center justify-between px-6 py-3 border-b border-gray-200 bg-gray-50">
+            <h2 className="text-gray-700 text-sm font-semibold">
+              Leads by <span className="font-bold">Product</span>
+            </h2>
+            <button
+              onClick={handlePrint}
+              className="bg-purple-800 text-white text-sm px-4 py-1.5 rounded hover:bg-purple-900 print-btn"
             >
-              {/* ✅ Light grid lines */}
-              <CartesianGrid stroke="#e0e0e0" vertical={false} />
+              Print
+            </button>
+          </div>
 
-              {/* ✅ Solid horizontal interval lines */}
-              <ReferenceLine y={0.5} stroke="#c0c0c0" />
-              <ReferenceLine y={1.5} stroke="#c0c0c0" />
-              <ReferenceLine y={2.5} stroke="#c0c0c0" />
-              <ReferenceLine y={3.5} stroke="#c0c0c0" />
+          {/* Chart */}
+          <div className="p-6 bg-white rounded-b-md">
+            <ResponsiveContainer width="100%" height={400}>
+              <BarChart
+                data={data}
+                margin={{ top: 20, right: 30, left: 20, bottom: 10 }}
+                barCategoryGap="20%"
+              >
+                <CartesianGrid stroke="#e0e0e0" vertical={false} />
+                <ReferenceLine y={0.5} stroke="#c0c0c0" />
+                <ReferenceLine y={1.5} stroke="#c0c0c0" />
+                <ReferenceLine y={2.5} stroke="#c0c0c0" />
+                <ReferenceLine y={3.5} stroke="#c0c0c0" />
+                <ReferenceLine y={0} stroke="#c0c0c0" strokeWidth={1.5} />
 
-              {/* ✅ Dark X-axis baseline */}
-              <ReferenceLine y={0} stroke="#444" strokeWidth={1.5} />
+                <XAxis dataKey="name" tick={{ fill: "#333" }} axisLine={false} tickLine={false} />
+                <YAxis
+                  tick={{ fill: "#333" }}
+                  allowDecimals={false}
+                  domain={[0, 4]}
+                  ticks={[0, 1, 2, 3, 4]}
+                  axisLine={false}
+                  tickLine={false}
+                />
 
-              {/* X-Axis */}
-              <XAxis
-                dataKey="name"
-                tick={{ fill: "#333" }}
-                axisLine={false}
-                tickLine={false}
-              />
+                <Legend verticalAlign="top" align="left" content={<CustomLegend />} />
+                
+                {/* 🌟 FIX APPLIED HERE: Set cursor={false} to remove the gray background highlight */}
+                <Tooltip content={<CustomTooltip />} cursor={false} /> 
 
-              {/* Y-Axis */}
-              <YAxis
-                tick={{ fill: "#333" }}
-                allowDecimals={false}
-                domain={[0, 4]}
-                ticks={[0, 1, 2, 3, 4]}
-                axisLine={false}
-                tickLine={false}
-              />
-
-              {/* Legend */}
-              <Legend
-                verticalAlign="top"
-                align="left"
-                content={<CustomLegend />}
-              />
-
-              {/* Bar */}
-              <Bar
-                dataKey="leads"
-                fill="#3d60d2"
-                name="No of leads"
-                barSize={80}
-                radius={[6, 6, 0, 0]}
-                isAnimationActive={false}
-              />
-            </BarChart>
-          </ResponsiveContainer>
+                <Bar
+                  dataKey="leads"
+                  fill="#3d60d2"
+                  name="No of leads"
+                  barSize={80}
+                  radius={[6, 6, 0, 0]}
+                />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
         </div>
       </div>
-
-      {/* ✅ Remove focus outline from chart */}
-      <style>{`
-        .recharts-surface:focus {
-          outline: none !important;
-        }
-      `}</style>
     </div>
   );
 };
