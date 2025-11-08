@@ -8,12 +8,12 @@ import './App.css';
 //import LeadsByStatusList from './Leadbystatuslist';
 //import LeadsByProductChart from './Leadproductgraph';
 //import LeadsByStatus from './Leadstatusgraph';
-import SalespersonLeadsChart from './Salespersonleads';
+import SalespersonLeads from './Salespersonleads';
 
 function App() {
   return (
     <div className="App">
-      <SalespersonLeadsChart />
+      <SalespersonLeads />
     </div>
   );
 }

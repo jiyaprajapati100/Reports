@@ -4,50 +4,29 @@ import {
   Bar,
   XAxis,
   YAxis,
-  CartesianGrid,
   Tooltip,
-  Legend,
+  CartesianGrid,
+  ReferenceLine,
   ResponsiveContainer,
 } from "recharts";
 
-const SalespersonLeadsChart = () => {
-  // ✅ Example stacked data
+const SalespersonLeads = () => {
   const data = [
-    {
-      name: "suku",
-      todaysAdded: 1,
-      allLeads: 2,
-      missLead: 1,
-      unscheduled: 0,
-      closedLeads: 1,
-    },
-    {
-      name: "Test",
-      todaysAdded: 0,
-      allLeads: 1,
-      missLead: 1,
-      unscheduled: 0,
-      closedLeads: 0,
-    },
-    {
-      name: "Tester_salesman",
-      todaysAdded: 0,
-      allLeads: 0,
-      missLead: 0,
-      unscheduled: 0,
-      closedLeads: 0,
-    },
+    { name: "Suku", all: 2, miss: 1, unscheduled: 0, closed: 1 },
+    { name: "Test", all: 1, miss: 1, unscheduled: 0, closed: 0 },
+    { name: "Tester_salesman", all: 0, miss: 0, unscheduled: 0, closed: 0 },
   ];
 
-  const handlePrint = () => {
-    window.print();
-  };
+  const handlePrint = () => window.print();
+
+  // Tick values for grid lines between 0-4
+  const yTicks = [0, 1, 2, 3, 4];
 
   return (
-    <div className="flex items-center justify-center bg-gray-100 min-h-screen p-4">
-      <div className="bg-white border border-gray-300 rounded-md shadow-sm w-full max-w-6xl">
+    <div className="min-h-screen bg-gray-100 flex items-start justify-center p-6">
+      <div className="bg-white border border-gray-300 rounded-md shadow-md w-full max-w-6xl">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-gray-200 bg-gray-50 px-6 py-3">
+        <div className="flex items-center justify-between px-6 py-3 border-b border-gray-200 bg-gray-50">
           <h2 className="text-gray-700 text-sm font-semibold">
             Salesperson <span className="font-bold">Leads</span>
           </h2>
@@ -59,77 +38,83 @@ const SalespersonLeadsChart = () => {
           </button>
         </div>
 
+        {/* Legend */}
+        <div className="flex flex-wrap items-center gap-5 px-6 py-2">
+          <LegendItem color="#34d399" label="Todays added Leads" />
+          <LegendItem color="#FF8A80" label="All Leads" />
+          <LegendItem color="#007bff" label="Miss lead" />
+          <LegendItem color="#94a3b8" label="Unscheduled" />
+          <LegendItem color="#6ee7b7" label="Closed Leads" />
+        </div>
+
         {/* Chart */}
-        <div className="p-6 bg-white rounded-b-md">
+        <div className="p-6 pt-4">
           <ResponsiveContainer width="100%" height={400}>
             <BarChart
               data={data}
-              margin={{ top: 20, right: 30, left: 20, bottom: 10 }}
+              margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+              barCategoryGap="35%"
             >
-              {/* ✅ Horizontal grid lines only */}
-              <CartesianGrid stroke="#e0e0e0" vertical={false} />
+              {/* Solid horizontal grid lines */}
+              <CartesianGrid stroke="#d1d5db" vertical={false} />
+
+              {/* Reference lines between ticks */}
+              <ReferenceLine y={0.5} stroke="#d1d5db" strokeWidth={1} />
+              <ReferenceLine y={1.5} stroke="#d1d5db" strokeWidth={1} />
+              <ReferenceLine y={2.5} stroke="#d1d5db" strokeWidth={1} />
+              <ReferenceLine y={3.5} stroke="#d1d5db" strokeWidth={1} />
 
               <XAxis
                 dataKey="name"
-                tick={{ fill: "#333", fontSize: 13 }}
-                axisLine={false}
+                tick={{ fontSize: 13, fill: "#333" }}
+                axisLine={false} // <-- Remove black border here
                 tickLine={false}
               />
+
               <YAxis
                 domain={[0, 4]}
-                ticks={[0, 1, 2, 3, 4]}
-                allowDecimals={false}
-                tick={{ fill: "#333", fontSize: 13 }}
+                ticks={yTicks}
+                tick={{ fontSize: 13, fill: "#333" }}
                 axisLine={false}
                 tickLine={false}
               />
-              <Tooltip cursor={{ fill: "rgba(0,0,0,0.05)" }} />
 
-              {/* ✅ Legend at top-left */}
-              <Legend
-                verticalAlign="top"
-                align="left"
-                wrapperStyle={{ marginLeft: 60, marginBottom: 20 }}
+              <Tooltip
+                cursor={false}
+                contentStyle={{
+                  fontSize: "13px",
+                  borderRadius: "6px",
+                  border: "1px solid #ddd",
+                }}
               />
 
-              {/* ✅ Stacked Bars */}
-              <Bar
-                dataKey="todaysAdded"
-                stackId="a"
-                fill="#009688" // Teal
-                name="Todays added Leads"
-                barSize={60}
-              />
-              <Bar
-                dataKey="allLeads"
-                stackId="a"
-                fill="#FFA07A" // Light Salmon
-                name="All Leads"
-              />
-              <Bar
-                dataKey="missLead"
-                stackId="a"
-                fill="#007BFF" // Blue
-                name="Miss lead"
-              />
-              <Bar
-                dataKey="unscheduled"
-                stackId="a"
-                fill="#6A5ACD" // Slate Blue
-                name="Unscheduled"
-              />
-              <Bar
-                dataKey="closedLeads"
-                stackId="a"
-                fill="#20B2AA" // Light Sea Green
-                name="Closed Leads"
-              />
+              <Bar dataKey="all" stackId="a" fill="#FF8A80" name="All Leads" barSize={80} />
+              <Bar dataKey="miss" stackId="a" fill="#007bff" name="Miss lead" barSize={80} />
+              <Bar dataKey="unscheduled" stackId="a" fill="#94a3b8" name="Unscheduled" barSize={80} />
+              <Bar dataKey="closed" stackId="a" fill="#6ee7b7" name="Closed Leads" barSize={80} />
             </BarChart>
           </ResponsiveContainer>
         </div>
       </div>
+      {/* ✅ Remove focus outline from chart */}
+      <style>{`
+        .recharts-surface:focus {
+          outline: none !important;
+        }
+      `}</style>
     </div>
   );
 };
 
-export default SalespersonLeadsChart;
+// Legend item component
+const LegendItem = ({ color, label }) => (
+  <div className="flex items-center">
+    <div
+      className="rounded-sm mr-2"
+      style={{ width: 24, height: 12, backgroundColor: color }}
+    ></div>
+    <span className="text-[13px] text-gray-700">{label}</span>
+  </div>
+);
+
+export default SalespersonLeads;
